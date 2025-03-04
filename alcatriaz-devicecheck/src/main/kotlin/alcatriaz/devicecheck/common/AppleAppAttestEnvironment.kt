@@ -9,9 +9,12 @@ import java.util.UUID
  * @property identifier An App Attest–specific constant that indicates whether the attested key belongs to the
  *   development or production environment.
  */
-enum class AppleAppAttestEnvironment(private val identifier: String) {
+enum class AppleAppAttestEnvironment(
+    private val identifier: String,
+) {
     DEVELOPMENT("appattestdevelop"),
-    PRODUCTION("appattest");
+    PRODUCTION("appattest"),
+    ;
 
     val aaguid: UUID = identifier.toByteArray().toUUID()
 }

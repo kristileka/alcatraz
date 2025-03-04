@@ -68,27 +68,28 @@ interface AttestationValidator {
     companion object {
         /** The root certificate authority of the attestation certificate */
         @JvmField
-        val APPLE_APP_ATTEST_ROOT_CA_BUILTIN_TRUST_ANCHOR = TrustAnchor(
-            Utils.readPemX509Certificate(
-                """
-                -----BEGIN CERTIFICATE-----
-                MIICITCCAaegAwIBAgIQC/O+DvHN0uD7jG5yH2IXmDAKBggqhkjOPQQDAzBSMSYw
-                JAYDVQQDDB1BcHBsZSBBcHAgQXR0ZXN0YXRpb24gUm9vdCBDQTETMBEGA1UECgwK
-                QXBwbGUgSW5jLjETMBEGA1UECAwKQ2FsaWZvcm5pYTAeFw0yMDAzMTgxODMyNTNa
-                Fw00NTAzMTUwMDAwMDBaMFIxJjAkBgNVBAMMHUFwcGxlIEFwcCBBdHRlc3RhdGlv
-                biBSb290IENBMRMwEQYDVQQKDApBcHBsZSBJbmMuMRMwEQYDVQQIDApDYWxpZm9y
-                bmlhMHYwEAYHKoZIzj0CAQYFK4EEACIDYgAERTHhmLW07ATaFQIEVwTtT4dyctdh
-                NbJhFs/Ii2FdCgAHGbpphY3+d8qjuDngIN3WVhQUBHAoMeQ/cLiP1sOUtgjqK9au
-                Yen1mMEvRq9Sk3Jm5X8U62H+xTD3FE9TgS41o0IwQDAPBgNVHRMBAf8EBTADAQH/
-                MB0GA1UdDgQWBBSskRBTM72+aEH/pwyp5frq5eWKoTAOBgNVHQ8BAf8EBAMCAQYw
-                CgYIKoZIzj0EAwMDaAAwZQIwQgFGnByvsiVbpTKwSga0kP0e8EeDS4+sQmTvb7vn
-                53O5+FRXgeLhpJ06ysC5PrOyAjEAp5U4xDgEgllF7En3VcE3iexZZtKeYnpqtijV
-                oyFraWVIyd/dganmrduC1bmTBGwD
-                -----END CERTIFICATE-----
-                """.trimIndent(),
-            ),
-            null,
-        )
+        val APPLE_APP_ATTEST_ROOT_CA_BUILTIN_TRUST_ANCHOR =
+            TrustAnchor(
+                Utils.readPemX509Certificate(
+                    """
+                    -----BEGIN CERTIFICATE-----
+                    MIICITCCAaegAwIBAgIQC/O+DvHN0uD7jG5yH2IXmDAKBggqhkjOPQQDAzBSMSYw
+                    JAYDVQQDDB1BcHBsZSBBcHAgQXR0ZXN0YXRpb24gUm9vdCBDQTETMBEGA1UECgwK
+                    QXBwbGUgSW5jLjETMBEGA1UECAwKQ2FsaWZvcm5pYTAeFw0yMDAzMTgxODMyNTNa
+                    Fw00NTAzMTUwMDAwMDBaMFIxJjAkBgNVBAMMHUFwcGxlIEFwcCBBdHRlc3RhdGlv
+                    biBSb290IENBMRMwEQYDVQQKDApBcHBsZSBJbmMuMRMwEQYDVQQIDApDYWxpZm9y
+                    bmlhMHYwEAYHKoZIzj0CAQYFK4EEACIDYgAERTHhmLW07ATaFQIEVwTtT4dyctdh
+                    NbJhFs/Ii2FdCgAHGbpphY3+d8qjuDngIN3WVhQUBHAoMeQ/cLiP1sOUtgjqK9au
+                    Yen1mMEvRq9Sk3Jm5X8U62H+xTD3FE9TgS41o0IwQDAPBgNVHRMBAf8EBTADAQH/
+                    MB0GA1UdDgQWBBSskRBTM72+aEH/pwyp5frq5eWKoTAOBgNVHQ8BAf8EBAMCAQYw
+                    CgYIKoZIzj0EAwMDaAAwZQIwQgFGnByvsiVbpTKwSga0kP0e8EeDS4+sQmTvb7vn
+                    53O5+FRXgeLhpJ06ysC5PrOyAjEAp5U4xDgEgllF7En3VcE3iexZZtKeYnpqtijV
+                    oyFraWVIyd/dganmrduC1bmTBGwD
+                    -----END CERTIFICATE-----
+                    """.trimIndent(),
+                ),
+                null,
+            )
     }
 
     /**
@@ -109,9 +110,10 @@ interface AttestationValidator {
         attestationObject: ByteArray,
         keyIdBase64: String,
         serverChallenge: ByteArray,
-    ): ValidatedAttestation = runBlocking {
-        validateAsync(attestationObject, keyIdBase64, serverChallenge)
-    }
+    ): ValidatedAttestation =
+        runBlocking {
+            validateAsync(attestationObject, keyIdBase64, serverChallenge)
+        }
 
     /**
      * Validate an attestation object. Suspending version of [validate].
@@ -138,36 +140,36 @@ internal class AttestationValidatorImpl(
     override val receiptValidator: ReceiptValidator,
     override val trustAnchor: TrustAnchor,
 ) : AttestationValidator {
-    private val cborObjectReader = ObjectMapper(CBORFactory())
-        .registerKotlinModule()
-        .readerFor(AttestationObject::class.java)
+    private val cborObjectReader =
+        ObjectMapper(CBORFactory())
+            .registerKotlinModule()
+            .readerFor(AttestationObject::class.java)
 
     override suspend fun validateAsync(
         attestationObject: ByteArray,
         keyIdBase64: String,
         serverChallenge: ByteArray,
-    ): ValidatedAttestation = coroutineScope {
-        val attestation = parseAttestationObject(attestationObject)
-        val keyId = keyIdBase64.fromBase64()
+    ): ValidatedAttestation =
+        coroutineScope {
+            val attestation = parseAttestationObject(attestationObject)
+            val keyId = keyIdBase64.fromBase64()
 
-        launch { verifyAttestationFormat(attestation) }
-        launch { verifyCertificateChain(attestation) }
-        launch { verifyNonce(attestation, serverChallenge) }
-        val credCert = async { verifyAttestationCertificate(attestation, keyId) }
-        launch { verifyAuthenticatorData(attestation, keyId) }
-        val receipt = async { validateAttestationReceiptAsync(attestation) }
-        val iOSVersion = async { parseIOSVersion(credCert.await()) }
+            launch { verifyAttestationFormat(attestation) }
+            launch { verifyCertificateChain(attestation) }
+            launch { verifyNonce(attestation, serverChallenge) }
+            val credCert = async { verifyAttestationCertificate(attestation, keyId) }
+            launch { verifyAuthenticatorData(attestation, keyId) }
+            val receipt = async { validateAttestationReceiptAsync(attestation) }
+            val iOSVersion = async { parseIOSVersion(credCert.await()) }
 
-        ValidatedAttestation(
-            certificate = credCert.await(),
-            receipt = receipt.await(),
-            iOSVersion = iOSVersion.await(),
-        )
-    }
+            ValidatedAttestation(
+                certificate = credCert.await(),
+                receipt = receipt.await(),
+                iOSVersion = iOSVersion.await(),
+            )
+        }
 
-    private fun parseAttestationObject(attestationObject: ByteArray): AttestationObject {
-        return cborObjectReader.readValue(attestationObject)
-    }
+    private fun parseAttestationObject(attestationObject: ByteArray): AttestationObject = cborObjectReader.readValue(attestationObject)
 
     private fun verifyAttestationFormat(attestationObject: AttestationObject) {
         if (attestationObject.fmt != AttestationObject.APPLE_APP_ATTEST_ATTESTATION_STATEMENT_FORMAT_IDENTIFIER) {
@@ -195,15 +197,19 @@ internal class AttestationValidatorImpl(
 
     private fun extractNonce(credCertDer: ByteArray): ByteArray {
         val credCert = Utils.readDerX509Certificate(credCertDer)
-        val octetString = getTaggedOctetString(
-            credCert = credCert,
-            oid = AttestationValidator.AppleCertificateExtensions.NONCE_OID,
-            tagNo = AttestationValidator.AppleCertificateExtensions.NONCE_TAG_NO,
-        )
+        val octetString =
+            getTaggedOctetString(
+                credCert = credCert,
+                oid = AttestationValidator.AppleCertificateExtensions.NONCE_OID,
+                tagNo = AttestationValidator.AppleCertificateExtensions.NONCE_TAG_NO,
+            )
         return octetString.octets
     }
 
-    private fun verifyNonce(attestationObject: AttestationObject, serverChallenge: ByteArray) {
+    private fun verifyNonce(
+        attestationObject: AttestationObject,
+        serverChallenge: ByteArray,
+    ) {
         // 2. Create clientDataHash as the SHA256 hash of the one-time challenge sent to your app before performing
         //    the attestation, ...
         val clientDataHash = serverChallenge.sha256()
@@ -214,11 +220,13 @@ internal class AttestationValidatorImpl(
 
         // 4. Obtain the value of the credCert extension with OID 1.2.840.113635.100.8.2, which is a DER-encoded
         //    ASN.1 sequence. Decode the sequence and extract the single octet string that it contains ...
-        val actualNonce = kotlin.runCatching {
-            extractNonce(attestationObject.attStmt.x5c.first())
-        }.getOrElse {
-            throw AttestationException.InvalidNonce(it)
-        }
+        val actualNonce =
+            kotlin
+                .runCatching {
+                    extractNonce(attestationObject.attStmt.x5c.first())
+                }.getOrElse {
+                    throw AttestationException.InvalidNonce(it)
+                }
 
         //   ... Verify that the string equals nonce.
         if (!constantTimeAreEqual(expectedNonce, actualNonce)) {
@@ -226,7 +234,10 @@ internal class AttestationValidatorImpl(
         }
     }
 
-    private fun verifyAttestationCertificate(attestationObject: AttestationObject, keyId: ByteArray): X509Certificate {
+    private fun verifyAttestationCertificate(
+        attestationObject: AttestationObject,
+        keyId: ByteArray,
+    ): X509Certificate {
         // 5. Create the SHA256 hash of the public key in credCert, ...
         val credCertHolder = X509CertificateHolder(attestationObject.attStmt.x5c.first())
         val actualKeyId = credCertHolder.createAppleKeyId()
@@ -242,7 +253,10 @@ internal class AttestationValidatorImpl(
     }
 
     @Suppress("ThrowsCount")
-    private fun verifyAuthenticatorData(attestationObject: AttestationObject, keyId: ByteArray) {
+    private fun verifyAuthenticatorData(
+        attestationObject: AttestationObject,
+        keyId: ByteArray,
+    ) {
         val authenticatorData = AuthenticatorData.parse(attestationObject.authData)
 
         if (authenticatorData.attestedCredentialData == null) {
@@ -278,7 +292,10 @@ internal class AttestationValidatorImpl(
 
     private suspend fun validateAttestationReceiptAsync(attestStatement: AttestationObject): Receipt {
         val receiptP7 = attestStatement.attStmt.receipt
-        val attestationCertificate = attestStatement.attStmt.x5c.first().let(Utils::readDerX509Certificate)
+        val attestationCertificate =
+            attestStatement.attStmt.x5c
+                .first()
+                .let(Utils::readDerX509Certificate)
         val publicKey = attestationCertificate.publicKey as ECPublicKey
 
         return try {
@@ -296,7 +313,11 @@ internal class AttestationValidatorImpl(
      *              [1] (TAGGED OBJECT)
      *                  OCTET STRING
      */
-    private fun getTaggedOctetString(credCert: X509Certificate, oid: String, tagNo: Int): DEROctetString {
+    private fun getTaggedOctetString(
+        credCert: X509Certificate,
+        oid: String,
+        tagNo: Int,
+    ): DEROctetString {
         val value = credCert.getExtensionValue(oid)
         val envelope = ASN1InputStream(value).readObjectAs<DEROctetString>()
         val sequence = ASN1InputStream(envelope.octetStream).readObjectAs<DLSequence>()
@@ -304,11 +325,12 @@ internal class AttestationValidatorImpl(
         return taggedObject.baseObject as DEROctetString
     }
 
-    private fun parseIOSVersion(credCert: X509Certificate): String? = runCatching {
-        getTaggedOctetString(
-            credCert = credCert,
-            oid = AttestationValidator.AppleCertificateExtensions.OS_VERSION_OID,
-            tagNo = AttestationValidator.AppleCertificateExtensions.OS_VERSION_TAG_NO,
-        ).octets.let(::String)
-    }.getOrNull()
+    private fun parseIOSVersion(credCert: X509Certificate): String? =
+        runCatching {
+            getTaggedOctetString(
+                credCert = credCert,
+                oid = AttestationValidator.AppleCertificateExtensions.OS_VERSION_OID,
+                tagNo = AttestationValidator.AppleCertificateExtensions.OS_VERSION_TAG_NO,
+            ).octets.let(::String)
+        }.getOrNull()
 }

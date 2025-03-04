@@ -7,8 +7,15 @@ object Dependencies {
     private const val BOUNCY_CASTLE_VERSION = "1.80"
 
     fun guice() = "com.google.inject:guice:$GUICE"
+
     fun coroutinesCore() = "org.jetbrains.kotlinx:kotlinx-coroutines-core:$COROUTINES_VERSION"
+
+
+
+
     fun jacksonKotlin() = "com.fasterxml.jackson.module:jackson-module-kotlin:$JACKSON_VERSION"
+
     fun jacksonDateFormat() = "com.fasterxml.jackson.dataformat:jackson-dataformat-cbor:$JACKSON_VERSION"
+
     fun bouncyCastle() = "org.bouncycastle:bcpkix-jdk18on:$BOUNCY_CASTLE_VERSION"
 }

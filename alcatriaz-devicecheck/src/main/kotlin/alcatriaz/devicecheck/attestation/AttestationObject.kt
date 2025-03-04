@@ -31,6 +31,7 @@ internal data class AttestationObject(
             return result
         }
     }
+
     companion object {
         const val APPLE_APP_ATTEST_ATTESTATION_STATEMENT_FORMAT_IDENTIFIER = "apple-appattest"
     }

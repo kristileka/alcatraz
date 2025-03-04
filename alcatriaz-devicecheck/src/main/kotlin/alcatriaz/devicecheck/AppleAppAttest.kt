@@ -36,10 +36,11 @@ class AppleAppAttest(
         Security.addProvider(BouncyCastleProvider())
     }
 
-    private val defaultAppleDeviceCheckUrl: URI = when (appleAppAttestEnvironment) {
-        AppleAppAttestEnvironment.DEVELOPMENT -> ReceiptExchange.APPLE_DEVICE_CHECK_APP_ATTEST_DEVELOPMENT_URL
-        AppleAppAttestEnvironment.PRODUCTION -> ReceiptExchange.APPLE_DEVICE_CHECK_APP_ATTEST_PRODUCTION_URL
-    }
+    private val defaultAppleDeviceCheckUrl: URI =
+        when (appleAppAttestEnvironment) {
+            AppleAppAttestEnvironment.DEVELOPMENT -> ReceiptExchange.APPLE_DEVICE_CHECK_APP_ATTEST_DEVELOPMENT_URL
+            AppleAppAttestEnvironment.PRODUCTION -> ReceiptExchange.APPLE_DEVICE_CHECK_APP_ATTEST_PRODUCTION_URL
+        }
 
     /**
      * Create an instance of an [AttestationValidator].
@@ -54,13 +55,14 @@ class AppleAppAttest(
         trustAnchor: TrustAnchor = AttestationValidator.APPLE_APP_ATTEST_ROOT_CA_BUILTIN_TRUST_ANCHOR,
         clock: Clock = Clock.systemUTC(),
         receiptValidator: ReceiptValidator = createReceiptValidator(clock = clock),
-    ): AttestationValidator = AttestationValidatorImpl(
-        app = app,
-        appleAppAttestEnvironment = appleAppAttestEnvironment,
-        clock = clock,
-        receiptValidator = receiptValidator,
-        trustAnchor = trustAnchor,
-    )
+    ): AttestationValidator =
+        AttestationValidatorImpl(
+            app = app,
+            appleAppAttestEnvironment = appleAppAttestEnvironment,
+            clock = clock,
+            receiptValidator = receiptValidator,
+            trustAnchor = trustAnchor,
+        )
 
     /**
      * Create an instance of an [AssertionValidator].
@@ -69,12 +71,11 @@ class AppleAppAttest(
      *   included in the assertion. The implementation is specific to the [app] and the backend it connects to.
      * @see AssertionValidator
      */
-    fun createAssertionValidator(
-        assertionChallengeValidator: AssertionChallengeValidator,
-    ): AssertionValidator = AssertionValidatorImpl(
-        app = app,
-        assertionChallengeValidator = assertionChallengeValidator,
-    )
+    fun createAssertionValidator(assertionChallengeValidator: AssertionChallengeValidator): AssertionValidator =
+        AssertionValidatorImpl(
+            app = app,
+            assertionChallengeValidator = assertionChallengeValidator,
+        )
 
     /**
      * Create an instance of a [ReceiptValidator].
@@ -90,12 +91,13 @@ class AppleAppAttest(
         trustAnchor: TrustAnchor = ReceiptValidator.APPLE_PUBLIC_ROOT_CA_G3_BUILTIN_TRUST_ANCHOR,
         clock: Clock = Clock.systemUTC(),
         maxAge: Duration = ReceiptValidator.APPLE_RECOMMENDED_MAX_AGE,
-    ): ReceiptValidator = ReceiptValidatorImpl(
-        app = app,
-        trustAnchor = trustAnchor,
-        clock = clock,
-        maxAge = maxAge,
-    )
+    ): ReceiptValidator =
+        ReceiptValidatorImpl(
+            app = app,
+            trustAnchor = trustAnchor,
+            clock = clock,
+            maxAge = maxAge,
+        )
 
     /**
      * Create an instance of a [ReceiptExchange].
@@ -120,11 +122,12 @@ class AppleAppAttest(
             SimpleAppleReceiptExchangeHttpClientAdapter(),
         appleDeviceCheckUrl: URI = defaultAppleDeviceCheckUrl,
         sanityChecks: Boolean = true,
-    ): ReceiptExchange = ReceiptExchangeImpl(
-        appleJwsGenerator = appleJwsGenerator,
-        receiptValidator = receiptValidator,
-        appleDeviceCheckUrl = appleDeviceCheckUrl,
-        appleReceiptExchangeHttpClientAdapter = appleReceiptExchangeHttpClientAdapter,
-        sanityChecks = sanityChecks,
-    )
+    ): ReceiptExchange =
+        ReceiptExchangeImpl(
+            appleJwsGenerator = appleJwsGenerator,
+            receiptValidator = receiptValidator,
+            appleDeviceCheckUrl = appleDeviceCheckUrl,
+            appleReceiptExchangeHttpClientAdapter = appleReceiptExchangeHttpClientAdapter,
+            sanityChecks = sanityChecks,
+        )
 }

@@ -4,5 +4,6 @@ include(
     "alcatriaz-core",
     "alcatriaz-test",
     "alcatriaz-server",
-    "alcatriaz-devicecheck"
+    "alcatriaz-devicecheck",
+    "alcatriaz-integrity",
 )

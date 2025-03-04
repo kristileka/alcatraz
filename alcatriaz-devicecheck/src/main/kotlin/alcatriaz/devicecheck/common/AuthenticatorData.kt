@@ -43,11 +43,12 @@ data class AttestedCredentialData(
             val mappingIterator = cborObjectReader.readValues<LinkedHashMap<Any, Any>>(stream)
 
             val credentialPublicKey = mappingIterator.nextValue()
-            val extensions: LinkedHashMap<Any, Any>? = if (mappingIterator.hasNextValue()) {
-                mappingIterator.nextValue()
-            } else {
-                null
-            }
+            val extensions: LinkedHashMap<Any, Any>? =
+                if (mappingIterator.hasNextValue()) {
+                    mappingIterator.nextValue()
+                } else {
+                    null
+                }
 
             return Pair(
                 AttestedCredentialData(
@@ -84,7 +85,9 @@ data class AttestedCredentialData(
 }
 
 @Suppress("MagicNumber")
-enum class AuthenticatorDataFlag(val bitmask: Byte) {
+enum class AuthenticatorDataFlag(
+    val bitmask: Byte,
+) {
     /** Bit 0: User Present (UP) result */
     UP(0x01),
 
@@ -119,39 +122,42 @@ data class AuthenticatorData(
     companion object {
         const val FLAGS_INDEX: Int = 32
 
-        private val cborObjectReader = ObjectMapper(CBORFactory())
-            .disable(JsonParser.Feature.AUTO_CLOSE_SOURCE)
-            .readerForMapOf(Any::class.java)
+        private val cborObjectReader =
+            ObjectMapper(CBORFactory())
+                .disable(JsonParser.Feature.AUTO_CLOSE_SOURCE)
+                .readerForMapOf(Any::class.java)
 
         @JvmStatic
         @Suppress("MagicNumber")
         fun parse(
             data: ByteArray,
             cborObjectReader: ObjectReader = AuthenticatorData.cborObjectReader,
-        ): AuthenticatorData = data.inputStream().use { stream ->
-            val rpIdHash = stream.readNBytes(32)
-            val flagsByte = stream.readNBytes(1).first()
-            val flags = AuthenticatorDataFlag.values().filter { (flagsByte and it.bitmask).toInt() != 0 }
-            val signCount = stream.readNBytes(4).readAsUInt32()
+        ): AuthenticatorData =
+            data.inputStream().use { stream ->
+                val rpIdHash = stream.readNBytes(32)
+                val flagsByte = stream.readNBytes(1).first()
+                val flags = AuthenticatorDataFlag.values().filter { (flagsByte and it.bitmask).toInt() != 0 }
+                val signCount = stream.readNBytes(4).readAsUInt32()
 
-            val (attestedCredentialData, extensions) = when {
-                AuthenticatorDataFlag.AT !in flags && AuthenticatorDataFlag.ED in flags -> {
-                    Pair(null, cborObjectReader.readValue<LinkedHashMap<Any, Any>>(stream))
-                }
-                AuthenticatorDataFlag.AT !in flags && AuthenticatorDataFlag.ED !in flags -> {
-                    Pair(null, null)
-                }
-                else -> AttestedCredentialData.parse(stream, cborObjectReader)
+                val (attestedCredentialData, extensions) =
+                    when {
+                        AuthenticatorDataFlag.AT !in flags && AuthenticatorDataFlag.ED in flags -> {
+                            Pair(null, cborObjectReader.readValue<LinkedHashMap<Any, Any>>(stream))
+                        }
+                        AuthenticatorDataFlag.AT !in flags && AuthenticatorDataFlag.ED !in flags -> {
+                            Pair(null, null)
+                        }
+                        else -> AttestedCredentialData.parse(stream, cborObjectReader)
+                    }
+
+                AuthenticatorData(
+                    rpIdHash = rpIdHash,
+                    flags = flags,
+                    signCount = signCount,
+                    attestedCredentialData = attestedCredentialData,
+                    extensions = extensions,
+                )
             }
-
-            AuthenticatorData(
-                rpIdHash = rpIdHash,
-                flags = flags,
-                signCount = signCount,
-                attestedCredentialData = attestedCredentialData,
-                extensions = extensions,
-            )
-        }
     }
 
     @Generated

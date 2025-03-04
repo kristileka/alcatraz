@@ -38,26 +38,27 @@ interface ReceiptValidator {
 
         /** The root certificate authority of the signer of the receipt */
         @JvmField
-        val APPLE_PUBLIC_ROOT_CA_G3_BUILTIN_TRUST_ANCHOR = TrustAnchor(
-            Utils.readPemX509Certificate(
-                """
-                -----BEGIN CERTIFICATE-----
-                MIICQzCCAcmgAwIBAgIILcX8iNLFS5UwCgYIKoZIzj0EAwMwZzEbMBkGA1UEAwwSQXBwbGUgUm9v
-                dCBDQSAtIEczMSYwJAYDVQQLDB1BcHBsZSBDZXJ0aWZpY2F0aW9uIEF1dGhvcml0eTETMBEGA1UE
-                CgwKQXBwbGUgSW5jLjELMAkGA1UEBhMCVVMwHhcNMTQwNDMwMTgxOTA2WhcNMzkwNDMwMTgxOTA2
-                WjBnMRswGQYDVQQDDBJBcHBsZSBSb290IENBIC0gRzMxJjAkBgNVBAsMHUFwcGxlIENlcnRpZmlj
-                YXRpb24gQXV0aG9yaXR5MRMwEQYDVQQKDApBcHBsZSBJbmMuMQswCQYDVQQGEwJVUzB2MBAGByqG
-                SM49AgEGBSuBBAAiA2IABJjpLz1AcqTtkyJygRMc3RCV8cWjTnHcFBbZDuWmBSp3ZHtfTjjTuxxE
-                tX/1H7YyYl3J6YRbTzBPEVoA/VhYDKX1DyxNB0cTddqXl5dvMVztK517IDvYuVTZXpmkOlEKMaNC
-                MEAwHQYDVR0OBBYEFLuw3qFYM4iapIqZ3r6966/ayySrMA8GA1UdEwEB/wQFMAMBAf8wDgYDVR0P
-                AQH/BAQDAgEGMAoGCCqGSM49BAMDA2gAMGUCMQCD6cHEFl4aXTQY2e3v9GwOAEZLuN+yRhHFD/3m
-                eoyhpmvOwgPUnPWTxnS4at+qIxUCMG1mihDK1A3UT82NQz60imOlM27jbdoXt2QfyFMm+YhidDkL
-                F1vLUagM6BgD56KyKA==
-                -----END CERTIFICATE-----
-                """.trimIndent(),
-            ),
-            null,
-        )
+        val APPLE_PUBLIC_ROOT_CA_G3_BUILTIN_TRUST_ANCHOR =
+            TrustAnchor(
+                Utils.readPemX509Certificate(
+                    """
+                    -----BEGIN CERTIFICATE-----
+                    MIICQzCCAcmgAwIBAgIILcX8iNLFS5UwCgYIKoZIzj0EAwMwZzEbMBkGA1UEAwwSQXBwbGUgUm9v
+                    dCBDQSAtIEczMSYwJAYDVQQLDB1BcHBsZSBDZXJ0aWZpY2F0aW9uIEF1dGhvcml0eTETMBEGA1UE
+                    CgwKQXBwbGUgSW5jLjELMAkGA1UEBhMCVVMwHhcNMTQwNDMwMTgxOTA2WhcNMzkwNDMwMTgxOTA2
+                    WjBnMRswGQYDVQQDDBJBcHBsZSBSb290IENBIC0gRzMxJjAkBgNVBAsMHUFwcGxlIENlcnRpZmlj
+                    YXRpb24gQXV0aG9yaXR5MRMwEQYDVQQKDApBcHBsZSBJbmMuMQswCQYDVQQGEwJVUzB2MBAGByqG
+                    SM49AgEGBSuBBAAiA2IABJjpLz1AcqTtkyJygRMc3RCV8cWjTnHcFBbZDuWmBSp3ZHtfTjjTuxxE
+                    tX/1H7YyYl3J6YRbTzBPEVoA/VhYDKX1DyxNB0cTddqXl5dvMVztK517IDvYuVTZXpmkOlEKMaNC
+                    MEAwHQYDVR0OBBYEFLuw3qFYM4iapIqZ3r6966/ayySrMA8GA1UdEwEB/wQFMAMBAf8wDgYDVR0P
+                    AQH/BAQDAgEGMAoGCCqGSM49BAMDA2gAMGUCMQCD6cHEFl4aXTQY2e3v9GwOAEZLuN+yRhHFD/3m
+                    eoyhpmvOwgPUnPWTxnS4at+qIxUCMG1mihDK1A3UT82NQz60imOlM27jbdoXt2QfyFMm+YhidDkL
+                    F1vLUagM6BgD56KyKA==
+                    -----END CERTIFICATE-----
+                    """.trimIndent(),
+                ),
+                null,
+            )
     }
 
     val app: App
@@ -90,9 +91,10 @@ interface ReceiptValidator {
         receiptP7: ByteArray,
         publicKey: ECPublicKey,
         notAfter: Instant = clock.instant().minus(maxAge),
-    ): Receipt = runBlocking {
-        validateReceiptAsync(receiptP7, publicKey, notAfter)
-    }
+    ): Receipt =
+        runBlocking {
+            validateReceiptAsync(receiptP7, publicKey, notAfter)
+        }
 }
 
 /**
@@ -112,27 +114,27 @@ internal class ReceiptValidatorImpl(
     override val maxAge: Duration,
     override val clock: Clock,
 ) : ReceiptValidator {
-
     override suspend fun validateReceiptAsync(
         receiptP7: ByteArray,
         publicKey: ECPublicKey,
         notAfter: Instant,
-    ): Receipt = coroutineScope {
-        val signedData = receiptP7.readAsSignedData()
-        val certs = signedData.readCertificateChain()
+    ): Receipt =
+        coroutineScope {
+            val signedData = receiptP7.readAsSignedData()
+            val certs = signedData.readCertificateChain()
 
-        // 1. Verify the signature.
-        launch { verifySignature(signedData, certs.first()) }
+            // 1. Verify the signature.
+            launch { verifySignature(signedData, certs.first()) }
 
-        // 2. Evaluate the trustworthiness of the signing certificate up to the
-        //    Apple public root certificate for App Attest.
-        launch { verifyCertificateChain(certs) }
+            // 2. Evaluate the trustworthiness of the signing certificate up to the
+            //    Apple public root certificate for App Attest.
+            launch { verifyCertificateChain(certs) }
 
-        Receipt(
-            payload = verifyPayload(signedData, publicKey, notAfter),
-            p7 = receiptP7,
-        )
-    }
+            Receipt(
+                payload = verifyPayload(signedData, publicKey, notAfter),
+                p7 = receiptP7,
+            )
+        }
 
     private fun verifyCertificateChain(certs: List<X509Certificate>) {
         try {
@@ -145,13 +147,20 @@ internal class ReceiptValidatorImpl(
         }
     }
 
-    private fun verifySignature(signedData: CMSSignedData, receiptCert: X509Certificate) {
-        val signerInformation = signedData.signerInfos.signers.takeIf { it.size == 1 }?.first()
-            ?: throw ReceiptException.InvalidSignature("The receipt contains more than one signature")
+    private fun verifySignature(
+        signedData: CMSSignedData,
+        receiptCert: X509Certificate,
+    ) {
+        val signerInformation =
+            signedData.signerInfos.signers
+                .takeIf { it.size == 1 }
+                ?.first()
+                ?: throw ReceiptException.InvalidSignature("The receipt contains more than one signature")
 
-        val signerInformationVerifier = JcaSimpleSignerInfoVerifierBuilder()
-            .setProvider(BouncyCastleProvider.PROVIDER_NAME)
-            .build(receiptCert)
+        val signerInformationVerifier =
+            JcaSimpleSignerInfoVerifierBuilder()
+                .setProvider(BouncyCastleProvider.PROVIDER_NAME)
+                .build(receiptCert)
         val signatureValid = signerInformation.verify(signerInformationVerifier)
         if (!signatureValid) {
             throw ReceiptException.InvalidSignature("The receipt signature is invalid")
@@ -159,7 +168,11 @@ internal class ReceiptValidatorImpl(
     }
 
     @Suppress("ThrowsCount")
-    private fun verifyPayload(signedData: CMSSignedData, publicKey: ECPublicKey, notAfter: Instant): Receipt.Payload {
+    private fun verifyPayload(
+        signedData: CMSSignedData,
+        publicKey: ECPublicKey,
+        notAfter: Instant,
+    ): Receipt.Payload {
         // 3. Parse the ASN.1 structure that makes up the payload.
         val receiptPayload = Receipt.Payload.parse(signedData)
 

@@ -8,7 +8,11 @@ import java.net.http.HttpResponse
 import javax.annotation.processing.Generated
 
 interface AppleReceiptExchangeHttpClientAdapter {
-    data class Response(val statusCode: Int, val headers: HttpHeaders, val body: ByteArray) {
+    data class Response(
+        val statusCode: Int,
+        val headers: HttpHeaders,
+        val body: ByteArray,
+    ) {
         @Generated
         override fun equals(other: Any?): Boolean {
             if (this === other) return true
@@ -32,21 +36,28 @@ interface AppleReceiptExchangeHttpClientAdapter {
         }
     }
 
-    fun post(uri: URI, authorizationHeader: Map<String, String>, body: ByteArray): Response
+    fun post(
+        uri: URI,
+        authorizationHeader: Map<String, String>,
+        body: ByteArray,
+    ): Response
 }
 
 internal class SimpleAppleReceiptExchangeHttpClientAdapter : AppleReceiptExchangeHttpClientAdapter {
     private val httpClient = HttpClient.newHttpClient()
+
     override fun post(
         uri: URI,
         authorizationHeader: Map<String, String>,
         body: ByteArray,
     ): AppleReceiptExchangeHttpClientAdapter.Response {
-        val request = HttpRequest.newBuilder()
-            .uri(uri)
-            .apply { authorizationHeader.forEach { (k, v) -> header(k, v) } }
-            .POST(HttpRequest.BodyPublishers.ofByteArray(body))
-            .build()
+        val request =
+            HttpRequest
+                .newBuilder()
+                .uri(uri)
+                .apply { authorizationHeader.forEach { (k, v) -> header(k, v) } }
+                .POST(HttpRequest.BodyPublishers.ofByteArray(body))
+                .build()
 
         val httpResponse = httpClient.send(request, HttpResponse.BodyHandlers.ofByteArray())
         return AppleReceiptExchangeHttpClientAdapter.Response(

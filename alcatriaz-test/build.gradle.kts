@@ -7,6 +7,7 @@ dependencies {
     implementation(Dependencies.guice())
     testImplementation(kotlin("test"))
     implementation(project(":alcatriaz-devicecheck"))
+    implementation(project(":alcatriaz-integrity"))
     implementation(project(":alcatriaz-server"))
     implementation(project(":alcatriaz-core"))
 }

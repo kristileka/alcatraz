@@ -9,5 +9,4 @@ dependencies {
     implementation(Dependencies.jacksonKotlin())
     implementation(Dependencies.jacksonDateFormat())
     implementation(Dependencies.jacksonDateFormat())
-    implementation(Dependencies.bouncyCastle())
 }

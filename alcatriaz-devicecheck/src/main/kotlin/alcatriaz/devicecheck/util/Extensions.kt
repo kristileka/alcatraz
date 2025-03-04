@@ -22,7 +22,6 @@ import java.util.UUID
 
 @Suppress("TooManyFunctions")
 internal object Extensions {
-
     fun List<X509Certificate>.verifyChain(
         trustAnchor: TrustAnchor,
         date: Date,
@@ -30,26 +29,33 @@ internal object Extensions {
         val certFactory = CertificateFactory.getInstance("X509")
         val certPath = certFactory.generateCertPath(this)
         val certPathValidator = CertPathValidator.getInstance("PKIX")
-        val pkixParameters = PKIXParameters(setOf(trustAnchor)).apply {
-            isRevocationEnabled = false
-            this.date = date
-        }
+        val pkixParameters =
+            PKIXParameters(setOf(trustAnchor)).apply {
+                isRevocationEnabled = false
+                this.date = date
+            }
 
         certPathValidator.validate(certPath, pkixParameters)
     }
 
     fun SubjectPublicKeyInfo.createAppleKeyId() = publicKeyData.bytes.sha256()
+
     fun PublicKey.createAppleKeyId() = SubjectPublicKeyInfo.getInstance(encoded).createAppleKeyId()
+
     fun X509CertificateHolder.createAppleKeyId() = subjectPublicKeyInfo.createAppleKeyId()
+
     fun X509Certificate.createAppleKeyId() = publicKey.createAppleKeyId()
 
     inline operator fun <reified T : Any> ASN1Sequence.get(index: Int): T = this.getObjectAt(index) as T
+
     inline fun <reified T : Any> ASN1InputStream.readObjectAs(): T = this.readObject() as T
 
     fun ByteArray.sha256(): ByteArray = MessageDigest.getInstance("SHA-256").digest(this)
+
     fun ByteArray.toBase64(): String = Base64.toBase64String(this)
 
     fun ByteArray.fromBase64(): ByteArray = Base64.decode(this)
+
     fun String.fromBase64(): ByteArray = Base64.decode(this)
 
     @Suppress("MagicNumber")
@@ -83,9 +89,10 @@ internal object Extensions {
     }
 
     object Pkcs7 {
-        fun ByteArray.readAsSignedData(): CMSSignedData = ASN1InputStream(this).use {
-            it.readObject().let(ContentInfo::getInstance).let(::CMSSignedData)
-        }
+        fun ByteArray.readAsSignedData(): CMSSignedData =
+            ASN1InputStream(this).use {
+                it.readObject().let(ContentInfo::getInstance).let(::CMSSignedData)
+            }
 
         fun CMSSignedData.readCertificateChain(): List<X509Certificate> =
             this.certificates.getMatches(null).map {

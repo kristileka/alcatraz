@@ -50,9 +50,10 @@ interface AssertionValidator {
         attestationPublicKey: ECPublicKey,
         lastCounter: Long,
         challenge: ByteArray,
-    ): Assertion = runBlocking {
-        validateAsync(assertionObject, clientData, attestationPublicKey, lastCounter, challenge)
-    }
+    ): Assertion =
+        runBlocking {
+            validateAsync(assertionObject, clientData, attestationPublicKey, lastCounter, challenge)
+        }
 
     /**
      * Validate an assertion object. Suspending version of [validate].
@@ -77,10 +78,10 @@ internal class AssertionValidatorImpl(
     override val app: App,
     override val assertionChallengeValidator: AssertionChallengeValidator,
 ) : AssertionValidator {
-
-    private val cborObjectReader = ObjectMapper(CBORFactory())
-        .registerKotlinModule()
-        .readerFor(AssertionEnvelope::class.java)
+    private val cborObjectReader =
+        ObjectMapper(CBORFactory())
+            .registerKotlinModule()
+            .readerFor(AssertionEnvelope::class.java)
 
     private fun verifySignature(
         assertionEnvelope: AssertionEnvelope,
@@ -120,14 +121,16 @@ internal class AssertionValidatorImpl(
         //      although Apple's documentation explicitly states that it does not. Until this is fixed (I have reported
         //      this to Apple and they are on it), we have to fix the flags on our own here to allow for the parsing to
         //      succeed.
-        authenticatorDataBlob[AuthenticatorData.FLAGS_INDEX] = authenticatorDataBlob[AuthenticatorData.FLAGS_INDEX]
-            .and(AuthenticatorDataFlag.ED.bitmask.xor(1))
-            .and(AuthenticatorDataFlag.AT.bitmask.xor(1))
+        authenticatorDataBlob[AuthenticatorData.FLAGS_INDEX] =
+            authenticatorDataBlob[AuthenticatorData.FLAGS_INDEX]
+                .and(AuthenticatorDataFlag.ED.bitmask.xor(1))
+                .and(AuthenticatorDataFlag.AT.bitmask.xor(1))
 
-        val authenticatorData = runCatching { AuthenticatorData.parse(authenticatorDataBlob) }
-            .getOrElse {
-                throw AssertionException.InvalidAuthenticatorData("Could not parse assertion authenticatorData")
-            }
+        val authenticatorData =
+            runCatching { AuthenticatorData.parse(authenticatorDataBlob) }
+                .getOrElse {
+                    throw AssertionException.InvalidAuthenticatorData("Could not parse assertion authenticatorData")
+                }
         // 4. Compute the SHA256 hash of the client’s App ID,
         //    and verify that it matches the RP ID in the authenticator data.
         val expectedRpId = app.appIdentifier.toByteArray().sha256()
@@ -153,12 +156,13 @@ internal class AssertionValidatorImpl(
         attestationPublicKey: ECPublicKey,
     ) {
         // 6. Verify that the challenge embedded in the client data matches the earlier challenge to the client.
-        val challengeIsValid = assertionChallengeValidator.validate(
-            assertionObj = assertionObj,
-            clientData = clientData,
-            attestationPublicKey = attestationPublicKey,
-            challenge = challenge,
-        )
+        val challengeIsValid =
+            assertionChallengeValidator.validate(
+                assertionObj = assertionObj,
+                clientData = clientData,
+                attestationPublicKey = attestationPublicKey,
+                challenge = challenge,
+            )
 
         if (!challengeIsValid) {
             throw AssertionException.InvalidChallenge("The given challenge is invalid")
@@ -171,19 +175,21 @@ internal class AssertionValidatorImpl(
         attestationPublicKey: ECPublicKey,
         lastCounter: Long,
         challenge: ByteArray,
-    ): Assertion = coroutineScope {
-        val assertionEnvelope = cborObjectReader.readValue<AssertionEnvelope>(assertionObject)
+    ): Assertion =
+        coroutineScope {
+            val assertionEnvelope = cborObjectReader.readValue<AssertionEnvelope>(assertionObject)
 
-        launch { verifySignature(assertionEnvelope, clientData, attestationPublicKey) }
+            launch { verifySignature(assertionEnvelope, clientData, attestationPublicKey) }
 
-        val authenticatorData = async {
-            verifyAuthenticatorData(assertionEnvelope.authenticatorData, lastCounter)
+            val authenticatorData =
+                async {
+                    verifyAuthenticatorData(assertionEnvelope.authenticatorData, lastCounter)
+                }
+
+            val assertion = Assertion(assertionEnvelope.signature, authenticatorData.await())
+
+            launch { verifyChallenge(challenge, assertion, clientData, attestationPublicKey) }
+
+            assertion
         }
-
-        val assertion = Assertion(assertionEnvelope.signature, authenticatorData.await())
-
-        launch { verifyChallenge(challenge, assertion, clientData, attestationPublicKey) }
-
-        assertion
-    }
 }
