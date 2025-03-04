@@ -117,12 +117,7 @@ class PlayIntegrityServiceImpl(
         if (deviceIntegrity == null) {
             throw IntegrityException.InvalidDeviceIntegrity(type = "null object")
         }
-        if (deviceIntegrity.deviceRecognitionVerdict.any {
-                it in ALLOWED_DEVICE_RECOGNITION_VERDICT
-            }
-        ) {
-            // DO NOTHING
-        } else {
+        if (deviceIntegrity.deviceRecognitionVerdict.none { it in ALLOWED_DEVICE_RECOGNITION_VERDICT }) {
             throw IntegrityException.WeakDevice(
                 type = "Weak Device",
             )
