@@ -1,9 +1,9 @@
-rootProject.name = "alcatriaz"
+rootProject.name = "alcatraz"
 
 include(
-    "alcatriaz-core",
-    "alcatriaz-test",
-    "alcatriaz-server",
-    "alcatriaz-devicecheck",
-    "alcatriaz-integrity",
+    "alcatraz-core",
+    "alcatraz-test",
+    "alcatraz-server",
+    "alcatraz-devicecheck",
+    "alcatraz-integrity",
 )
