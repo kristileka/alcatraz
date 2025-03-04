@@ -1,4 +1,10 @@
 package alcatriaz.server
 
-class AlcatriazApplication {
+class Alcatriaz {
+
+    class Builder {
+
+    }
+
+
 }
