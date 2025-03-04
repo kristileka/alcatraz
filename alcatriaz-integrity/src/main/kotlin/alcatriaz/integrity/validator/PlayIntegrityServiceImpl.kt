@@ -123,7 +123,7 @@ class PlayIntegrityServiceImpl(
         ) {
             // DO NOTHING
         } else {
-            throw IntegrityException.WeekDeviceIntegrity(
+            throw IntegrityException.WeakDevice(
                 type = "Weak Device",
             )
         }

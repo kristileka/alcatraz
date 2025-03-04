@@ -10,9 +10,6 @@ object Dependencies {
 
     fun coroutinesCore() = "org.jetbrains.kotlinx:kotlinx-coroutines-core:$COROUTINES_VERSION"
 
-
-
-
     fun jacksonKotlin() = "com.fasterxml.jackson.module:jackson-module-kotlin:$JACKSON_VERSION"
 
     fun jacksonDateFormat() = "com.fasterxml.jackson.dataformat:jackson-dataformat-cbor:$JACKSON_VERSION"

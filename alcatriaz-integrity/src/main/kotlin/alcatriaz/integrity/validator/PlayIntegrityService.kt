@@ -9,8 +9,7 @@ interface PlayIntegrityService {
         @JvmStatic
         val APP_INTEGRITY_URL: String = "https://playintegrity.googleapis.com/v1/"
 
-        private fun generateURL(packageName: String): URI =
-            URI.create("$APP_INTEGRITY_URL$packageName:decodeIntegrityToken")
+        private fun generateURL(packageName: String): URI = URI.create("$APP_INTEGRITY_URL$packageName:decodeIntegrityToken")
     }
 
     fun validate(token: String): PlayIntegrityEnvelope
@@ -20,13 +19,13 @@ interface PlayIntegrityService {
             PlayIntegrityServiceImpl(
                 url = generateURL(packageName),
                 userMessageValidator =
-                object : IntegrityTokenValidator {
-                    override fun validateTokenData(data: String) = Unit
-                },
+                    object : IntegrityTokenValidator {
+                        override fun validateTokenData(data: String) = Unit
+                    },
                 googleJWTProvider =
-                object : GoogleJWTProvider {
-                    override fun get() = ""
-                },
+                    object : GoogleJWTProvider {
+                        override fun get() = ""
+                    },
             )
     }
 }

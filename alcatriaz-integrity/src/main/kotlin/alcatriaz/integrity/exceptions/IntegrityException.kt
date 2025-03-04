@@ -4,11 +4,6 @@ sealed class IntegrityException(
     message: String,
     cause: Throwable?,
 ) : RuntimeException(message, cause) {
-    class GoogleServiceError(
-        message: String,
-        cause: Throwable? = null,
-    ) : IntegrityException(message, cause)
-
     class InvalidAppIntegrity(
         cause: Throwable? = null,
         type: String? = "",
@@ -29,7 +24,7 @@ sealed class IntegrityException(
         type: String? = "",
     ) : IntegrityException("Device Environment Details is invalid. Environment details Type: $type", cause)
 
-    class WeekDeviceIntegrity(
+    class WeakDevice(
         cause: Throwable? = null,
         type: String? = "",
     ) : IntegrityException("Device integrity is not strong Type: $type", cause)
@@ -39,9 +34,9 @@ sealed class IntegrityException(
         packageName: String? = "",
         requestedPackageName: String? = "",
     ) : IntegrityException(
-            "Play Integrity is invalid. Package Name: $packageName Requested Package Name: $requestedPackageName ",
-            cause,
-        )
+        "Play Integrity is invalid. Package Name: $packageName Requested Package Name: $requestedPackageName ",
+        cause,
+    )
 
     class InvalidNonce(
         cause: Throwable? = null,
@@ -56,8 +51,4 @@ sealed class IntegrityException(
         cause: Throwable? = null,
         type: String? = "",
     ) : IntegrityException("License integrity is invalid. License Type: $type", cause)
-
-    class GeneralIntegrityError(
-        cause: Throwable? = null,
-    ) : IntegrityException("General Integrity Error", cause)
 }

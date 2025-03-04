@@ -6,6 +6,6 @@ import org.junit.jupiter.api.Test
 class AlcatriazApplicationTest {
     @Test
     fun projectRunTest() {
-        val alcatriaz = Alcatriaz.Builder().build()
+        Alcatriaz.Builder().build()
     }
 }
