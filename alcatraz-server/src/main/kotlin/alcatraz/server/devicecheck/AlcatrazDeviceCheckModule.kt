@@ -1,5 +1,6 @@
 package alcatraz.server.devicecheck
 
+import alcatraz.core.Environment
 import alcatraz.devicecheck.assertion.AssertionChallengeValidator
 import alcatraz.devicecheck.assertion.AssertionValidator
 import alcatraz.devicecheck.assertion.AssertionValidatorImpl
@@ -7,7 +8,6 @@ import alcatraz.devicecheck.attestation.AttestationValidator
 import alcatraz.devicecheck.attestation.AttestationValidatorImpl
 import alcatraz.devicecheck.common.AppleAppAttestEnvironment
 import alcatraz.devicecheck.receipt.*
-import alcatraz.server.Environment
 import com.google.inject.AbstractModule
 import com.google.inject.Provides
 import com.google.inject.name.Named

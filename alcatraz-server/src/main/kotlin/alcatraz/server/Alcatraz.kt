@@ -1,5 +1,8 @@
 package alcatraz.server
 
+import alcatraz.core.AlcatrazCoreBuilder
+import alcatraz.core.Environment
+import alcatraz.core.framework.AlcatrazFrameworkDetector
 import com.google.inject.Guice
 
 class Alcatraz {
@@ -11,12 +14,17 @@ class Alcatraz {
                 this.environment = environment
             }
 
-        fun build(): Alcatraz {
-            Guice.createInjector(
-                AlcatrazModule(environment),
-            )
+        fun build() {
+            val frameworkAdapter = AlcatrazFrameworkDetector.detectFramework()
+            val injector =
+                Guice.createInjector(
+                    AlcatrazModule(
+                        environment,
+                        frameworkAdapter,
+                    ),
+                )
 
-            return Alcatraz()
+            injector.getInstance(AlcatrazCoreBuilder::class.java).generate()
         }
     }
 }

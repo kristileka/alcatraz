@@ -5,6 +5,7 @@ plugins {
 
 dependencies {
     implementation(Dependencies.guice())
+    implementation(project(":alcatraz-core"))
     implementation(project(":alcatraz-devicecheck"))
 }
 
