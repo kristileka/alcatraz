@@ -10,5 +10,7 @@ class AlcatrazCoreBuilder
         val environment: Environment,
     ) {
         fun generate() {
+            print(environment)
+            print(frameworkType)
         }
     }
