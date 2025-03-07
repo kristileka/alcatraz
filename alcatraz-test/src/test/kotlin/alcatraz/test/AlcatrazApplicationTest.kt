@@ -6,6 +6,11 @@ import org.junit.jupiter.api.Test
 class AlcatrazApplicationTest {
     @Test
     fun projectRunTest() {
-        Alcatraz.Builder().build()
+        Alcatraz
+            .Builder()
+            .withDeviceCheck(
+                Alcatraz.Builder
+                    .DeviceCheck(),
+            ).build()
     }
 }

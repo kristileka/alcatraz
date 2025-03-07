@@ -8,6 +8,7 @@ import alcatraz.devicecheck.attestation.AttestationValidator
 import alcatraz.devicecheck.attestation.AttestationValidatorImpl
 import alcatraz.devicecheck.common.AppleAppAttestEnvironment
 import alcatraz.devicecheck.receipt.*
+import alcatraz.server.Alcatraz
 import com.google.inject.AbstractModule
 import com.google.inject.Provides
 import com.google.inject.name.Named
@@ -15,7 +16,7 @@ import java.net.URI
 import java.time.Clock
 
 class AlcatrazDeviceCheckModule(
-    private val alcatrazDeviceCheckProperties: AlcatrazDeviceCheckProperties,
+    private val deviceCheck: Alcatraz.Builder.DeviceCheck,
 ) : AbstractModule() {
     @Provides
     fun provideAppleEnvironment(environment: Environment): AppleAppAttestEnvironment =
@@ -58,7 +59,7 @@ class AlcatrazDeviceCheckModule(
     @Provides
     @Named("appIdentifier")
     fun providesAppIdentifier(): String =
-        with(alcatrazDeviceCheckProperties) {
+        with(deviceCheck) {
             "$teamIdentifier.$bundleIdentifier"
         }
 
@@ -71,7 +72,7 @@ class AlcatrazDeviceCheckModule(
         )
 
     @Provides
-    fun providesAppleJWSGenerator(): AppleJwsGenerator = alcatrazDeviceCheckProperties.appleJwsGenerator
+    fun providesAppleJWSGenerator(): AppleJwsGenerator = deviceCheck.appleJwsGenerator
 
     @Provides
     fun providesReceiptExchange(
