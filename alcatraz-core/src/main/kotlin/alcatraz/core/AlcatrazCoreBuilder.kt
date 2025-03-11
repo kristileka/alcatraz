@@ -12,5 +12,6 @@ class AlcatrazCoreBuilder
         fun generate() {
             print(environment)
             print(frameworkType)
+            print(frameworkType)
         }
     }
