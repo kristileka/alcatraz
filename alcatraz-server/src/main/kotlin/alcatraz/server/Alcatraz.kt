@@ -24,7 +24,7 @@ class Alcatraz {
         fun build() {
             val frameworkAdapter = AlcatrazFrameworkDetector.detectFramework()
             val featureModules =
-                listOf(
+                listOfNotNull(
                     deviceCheck,
                 )
             val injector =

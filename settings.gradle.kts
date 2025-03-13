@@ -7,4 +7,5 @@ include(
     "alcatraz-server",
     "alcatraz-devicecheck",
     "alcatraz-integrity",
+    "alcatraz-common",
 )
