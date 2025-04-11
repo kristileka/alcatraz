@@ -1,6 +1,6 @@
 object Dependencies {
-    const val JVM_TARGET = "21"
-    const val KOTLIN_VERSION = "2.0.20"
+    const val JVM_TARGET = "17"
+    const val KOTLIN_VERSION = "1.9.25"
     private const val JACKSON_VERSION = "2.18.2"
     private const val COROUTINES_VERSION = "1.10.1"
     private const val GUICE = "7.0.0"

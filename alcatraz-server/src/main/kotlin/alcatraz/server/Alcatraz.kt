@@ -23,22 +23,19 @@ class Alcatraz {
 
         fun build() {
             val frameworkAdapter = AlcatrazFrameworkDetector.detectFramework()
-            val featureModules =
-                listOfNotNull(
-                    deviceCheck,
-                )
             val injector =
                 Guice.createInjector(
                     AlcatrazModule(
                         environment,
                         frameworkAdapter,
+                        deviceCheck!!,
                     ),
                 )
 
             injector.getInstance(AlcatrazCoreBuilder::class.java).generate()
         }
 
-        class DeviceCheck {
+        class DeviceCheck : Feature {
             lateinit var teamIdentifier: String
             lateinit var bundleIdentifier: String
             lateinit var appleJwsGenerator: AppleJwsGenerator

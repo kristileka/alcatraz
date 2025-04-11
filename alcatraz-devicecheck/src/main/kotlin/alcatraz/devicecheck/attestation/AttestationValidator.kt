@@ -14,7 +14,6 @@ import alcatraz.devicecheck.util.Utils
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.dataformat.cbor.CBORFactory
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
-import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -156,15 +155,15 @@ class AttestationValidatorImpl(
             launch { verifyAttestationFormat(attestation) }
             launch { verifyCertificateChain(attestation) }
             launch { verifyNonce(attestation, serverChallenge) }
-            val credCert = async { verifyAttestationCertificate(attestation, keyId) }
+            val credCert = verifyAttestationCertificate(attestation, keyId)
             launch { verifyAuthenticatorData(attestation, keyId) }
-            val receipt = async { validateAttestationReceiptAsync(attestation) }
-            val iOSVersion = async { parseIOSVersion(credCert.await()) }
+            val receipt = validateAttestationReceiptAsync(attestation)
+            val iOSVersion = parseIOSVersion(credCert)
 
             ValidatedAttestation(
-                certificate = credCert.await(),
-                receipt = receipt.await(),
-                iOSVersion = iOSVersion.await(),
+                certificate = credCert,
+                receipt = receipt,
+                iOSVersion = iOSVersion,
             )
         }
 

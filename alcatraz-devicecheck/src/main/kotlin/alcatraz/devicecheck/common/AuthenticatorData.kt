@@ -131,7 +131,7 @@ data class AuthenticatorData(
         @Suppress("MagicNumber")
         fun parse(
             data: ByteArray,
-            cborObjectReader: ObjectReader = AuthenticatorData.cborObjectReader,
+            cborObjectReader: ObjectReader = Companion.cborObjectReader,
         ): AuthenticatorData =
             data.inputStream().use { stream ->
                 val rpIdHash = stream.readNBytes(32)
