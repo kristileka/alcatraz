@@ -1,4 +1,4 @@
-package alcatraz.integrity.codegen
+package alcatraz.codegen
 
 interface CodeGenerator {
     fun generate(config: GenerationConfig): GeneratedFile

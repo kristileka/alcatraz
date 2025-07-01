@@ -1,7 +1,7 @@
 package alcatraz.integrity.codegen.cli
 
-import alcatraz.integrity.codegen.GenerationConfig
-import alcatraz.integrity.codegen.GeneratorRegistry
+import alcatraz.codegen.GenerationConfig
+import alcatraz.integrity.codegen.IntegrityRegistry
 import com.github.ajalt.clikt.core.CliktCommand
 import com.github.ajalt.clikt.parameters.options.option
 import com.github.ajalt.clikt.parameters.options.required
@@ -43,7 +43,7 @@ class GenerateCommand : CliktCommand(name = "generate", help = "Generate code ba
             basePath = basePath
         )
 
-        val registry = GeneratorRegistry()
+        val registry = IntegrityRegistry()
 
         val requestedModules = registry.getAvailableGenerators(config).keys
 
@@ -52,7 +52,7 @@ class GenerateCommand : CliktCommand(name = "generate", help = "Generate code ba
         echo("Package: $packageName")
 
         var generatedCount = 0
-        requestedModules.forEach{ moduleName ->
+        requestedModules.forEach { moduleName ->
             val generator = registry.getGenerator(moduleName)
             if (generator == null) {
                 echo(

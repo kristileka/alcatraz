@@ -1,8 +1,8 @@
 package alcatraz.integrity.codegen.template.generator
 
-import alcatraz.integrity.codegen.CodeGenerator
-import alcatraz.integrity.codegen.GeneratedFile
-import alcatraz.integrity.codegen.GenerationConfig
+import alcatraz.codegen.CodeGenerator
+import alcatraz.codegen.GeneratedFile
+import alcatraz.codegen.GenerationConfig
 
 class DeviceCheckGenerator : CodeGenerator {
     override fun canGenerate(config: GenerationConfig): Boolean {

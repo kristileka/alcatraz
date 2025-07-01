@@ -2,6 +2,7 @@ rootProject.name = "alcatraz"
 
 include(
     "alcatraz-signature",
+    "alcatraz-codegen",
     "alcatraz-core",
     "alcatraz-spring-test",
     "alcatraz-test",

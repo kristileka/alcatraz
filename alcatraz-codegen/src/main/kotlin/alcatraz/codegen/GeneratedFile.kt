@@ -1,4 +1,4 @@
-package alcatraz.integrity.codegen
+package alcatraz.codegen
 
 import java.io.File
 
