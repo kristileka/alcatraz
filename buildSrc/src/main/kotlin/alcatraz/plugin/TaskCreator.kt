@@ -2,6 +2,7 @@ package alcatraz.plugin
 
 import alcatraz.extension.AlcatrazExtension
 import org.gradle.api.Project
+import org.gradle.configurationcache.extensions.capitalized
 import java.io.File
 
 class TaskCreator(
@@ -13,7 +14,7 @@ class TaskCreator(
     private val argumentBuilder = ArgumentBuilder()
 
     fun createTask(moduleName: String, moduleConfig: CodegenModule) {
-        val taskName = "generate${moduleName.capitalize()}Classes"
+        val taskName = "generate${moduleName.capitalized()}Classes"
 
         project.tasks.register(taskName) {
             group = "alcatraz"
@@ -68,7 +69,7 @@ class TaskCreator(
         }
     }
 
-    private fun buildRuntimeClasspath(codegenProject: org.gradle.api.Project) =
+    private fun buildRuntimeClasspath(codegenProject: Project) =
         codegenProject.tasks
             .named("compileKotlin")
             .get()

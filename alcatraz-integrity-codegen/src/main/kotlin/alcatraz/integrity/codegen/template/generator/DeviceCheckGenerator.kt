@@ -10,8 +10,6 @@ class DeviceCheckGenerator : CodeGenerator {
     }
 
     override fun generate(config: GenerationConfig): GeneratedFile {
-        val teamId = config.teamIdentifier ?: throw IllegalStateException("Team identifier is required")
-
         val content = """
             package ${config.packageName}
         """.trimIndent()

@@ -2,6 +2,7 @@ package alcatraz.plugin
 
 import alcatraz.extension.AlcatrazExtension
 import org.gradle.api.Project
+import org.gradle.configurationcache.extensions.capitalized
 
 class TaskManager(
     private val project: Project,
@@ -45,7 +46,7 @@ class TaskManager(
             val enabledModules = moduleRegistry.getEnabledModules(extension)
             
             enabledModules.forEach { moduleName ->
-                val moduleTask = project.tasks.findByName("generate${moduleName.capitalize()}Classes")
+                val moduleTask = project.tasks.findByName("generate${moduleName.capitalized()}Classes")
                 moduleTask?.let {
                     generateTask.configure { dependsOn(it) }
                 }
