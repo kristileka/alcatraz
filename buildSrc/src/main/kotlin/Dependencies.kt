@@ -6,6 +6,7 @@ object Dependencies {
     private const val COROUTINES_VERSION = "1.10.1"
     private const val GUICE = "7.0.0"
     private const val BOUNCY_CASTLE_VERSION = "1.80"
+    private const val CAFFEINE_VERSION = "3.2.1"
 
     fun guice() = "com.google.inject:guice:$GUICE"
 
@@ -18,4 +19,6 @@ object Dependencies {
     fun cliktCommand() = "com.github.ajalt.clikt:clikt:$CLIKT_VERSION"
 
     fun bouncyCastle() = "org.bouncycastle:bcpkix-jdk18on:$BOUNCY_CASTLE_VERSION"
+
+    fun caffeine() = "com.github.ben-manes.caffeine:caffeine:$CAFFEINE_VERSION"
 }

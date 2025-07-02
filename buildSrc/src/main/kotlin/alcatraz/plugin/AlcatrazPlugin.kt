@@ -9,6 +9,8 @@ class AlcatrazPlugin : Plugin<Project> {
 
     override fun apply(project: Project) {
         val extension = project.extensions.create<AlcatrazExtension>("alcatraz")
+        project.dependencies.add("implementation", Dependencies.caffeine())
+        project.dependencies.add("implementation", project.project(":alcatraz-integrity"))
 
         val projectSetup = ProjectSetup(project)
         val taskManager = TaskManager(project, extension)

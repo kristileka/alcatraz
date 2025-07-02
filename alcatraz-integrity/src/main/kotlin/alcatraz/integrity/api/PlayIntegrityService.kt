@@ -1,4 +1,4 @@
-package alcatraz.integrity.validator
+package alcatraz.integrity.api
 
 import alcatraz.integrity.model.PlayIntegrityEnvelope
 

@@ -1,4 +1,4 @@
-package alcatraz.integrity.validator
+package alcatraz.integrity.api
 
 interface IntegrityTokenValidator {
     fun validateTokenData(data: String)

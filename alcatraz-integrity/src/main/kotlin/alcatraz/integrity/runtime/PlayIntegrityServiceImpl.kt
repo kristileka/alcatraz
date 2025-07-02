@@ -1,19 +1,27 @@
-package alcatraz.integrity.validator
+package alcatraz.integrity.runtime
 
+import alcatraz.common.logger
+import alcatraz.integrity.api.IntegrityTokenValidator
+import alcatraz.integrity.api.PlayIntegrityService
 import alcatraz.integrity.exceptions.IntegrityException
-import alcatraz.integrity.google.GoogleJWTProvider
 import alcatraz.integrity.google.IntegrityHttpClient
-import alcatraz.integrity.model.*
+import alcatraz.integrity.model.PlayIntegrityEnvelope
+import alcatraz.integrity.model.TokenPayloadExternal
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import kotlinx.coroutines.*
+import com.google.inject.Provider
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import java.net.URI
 import java.util.*
 
 class PlayIntegrityServiceImpl(
     private val url: URI,
     private val userMessageValidator: IntegrityTokenValidator,
-    private val googleJWTProvider: GoogleJWTProvider,
+    private val googleJWTProvider: Provider<String>,
 ) : PlayIntegrityService {
+
+
     companion object {
         val objectMapper = jacksonObjectMapper()
         val ALLOWED_DEVICE_RECOGNITION_VERDICT =
@@ -167,6 +175,7 @@ class PlayIntegrityServiceImpl(
             mapOf(
                 "integrity_token" to token,
             )
+        logger().error(token)
         val response =
             appleReceiptExchangeHttpClientAdapter.post(
                 url,

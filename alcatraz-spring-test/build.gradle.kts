@@ -12,11 +12,6 @@ version = "0.0.1-SNAPSHOT"
 alcatraz {
     packageName.set("alcatraz.spring.test")
 
-    devicecheck {
-        enabled.set(true)
-        teamIdentifier.set("Team_ID")
-    }
-
     integrity {
         enabled.set(true)
         token.set("test")
