@@ -1,4 +1,4 @@
-package alcatraz.test
+package alcatraz.spring.test
 
 import org.junit.jupiter.api.Test
 
