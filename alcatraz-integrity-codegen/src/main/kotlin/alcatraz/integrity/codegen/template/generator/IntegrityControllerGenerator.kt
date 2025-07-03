@@ -14,13 +14,25 @@ class IntegrityControllerGenerator : CodeGenerator {
             import org.springframework.web.bind.annotation.RestController
             import alcatraz.integrity.api.PlayIntegrityService
             import alcatraz.integrity.model.PlayIntegrityEnvelope
+            import alcatraz.integrity.model.RegisterDevice
+            import alcatraz.integrity.provider.PlayIntegrityProvider
+            import org.springframework.web.bind.annotation.PostMapping
+            import org.springframework.web.bind.annotation.RequestBody
 
             @RestController
             @RequestMapping("${config.basePath}")
             class IntegrityController(
-                private val integrityService: PlayIntegrityService
+                private val integrityService: PlayIntegrityService,
+                private val integrityProvider: PlayIntegrityProvider
             ) {
 
+                @PostMapping("/challenge")
+                fun registerChallenge(
+                  @RequestBody registerDevice: RegisterDevice
+                ): String {
+                    return integrityProvider.getChallenge(registerDevice.deviceId)
+                }
+                
                 @GetMapping("/test")
                 fun getTest(): PlayIntegrityEnvelope {
                     return integrityService.validate("Asd")

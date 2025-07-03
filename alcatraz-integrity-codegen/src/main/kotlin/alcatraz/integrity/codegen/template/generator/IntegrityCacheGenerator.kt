@@ -13,16 +13,17 @@ class IntegrityCacheGenerator : CodeGenerator {
             import com.github.benmanes.caffeine.cache.Caffeine
             import com.github.benmanes.caffeine.cache.Cache
             import org.springframework.stereotype.Service
+            import java.util.UUID
 
             @Service
             class CacheServiceDefault : CacheService {
-                val cache: Cache<String, String> = Caffeine.newBuilder()
+                val cache: Cache<UUID, String> = Caffeine.newBuilder()
                     .maximumSize(1_000_000) 
                     .build()
 
-                override fun get(deviceId: String) = cache.getIfPresent(deviceId)
-                override fun put(deviceId: String, data: String) = cache.put(deviceId, data)
-                override fun remove(deviceId: String) = cache.invalidate(deviceId)
+                override fun get(deviceId: UUID) = cache.getIfPresent(deviceId)
+                override fun put(deviceId: UUID, data: String) = cache.put(deviceId, data)
+                override fun remove(deviceId: UUID) = cache.invalidate(deviceId)
                 override fun clearAll() = cache.cleanUp()
             }
         """.trimIndent()

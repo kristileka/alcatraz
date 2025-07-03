@@ -21,7 +21,6 @@ class PlayIntegrityServiceImpl(
     private val googleJWTProvider: Provider<String>,
 ) : PlayIntegrityService {
 
-
     companion object {
         val objectMapper = jacksonObjectMapper()
         val ALLOWED_DEVICE_RECOGNITION_VERDICT =

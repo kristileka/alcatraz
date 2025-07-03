@@ -13,6 +13,8 @@ class IntegrityConfigurationGenerator : CodeGenerator {
             import org.springframework.context.annotation.Bean
             import alcatraz.integrity.factory.PlayIntegrityServiceFactory
             import alcatraz.integrity.api.PlayIntegrityService
+            import alcatraz.integrity.api.CacheService
+            import alcatraz.integrity.provider.PlayIntegrityProvider
             
             @Configuration
             class IntegrityConfiguration {
@@ -22,6 +24,13 @@ class IntegrityConfigurationGenerator : CodeGenerator {
                     return PlayIntegrityServiceFactory.create("${config.packageName}"){
                         "googleToken"
                     }
+                }
+                
+                @Bean
+                fun provideIntegrityProvider(
+                    cacheService:CacheService
+                ): PlayIntegrityProvider {
+                    return PlayIntegrityProvider(cacheService)
                 }
             }
         """.trimIndent()
