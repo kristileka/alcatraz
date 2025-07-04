@@ -10,7 +10,7 @@ group = "test"
 version = "0.0.1-SNAPSHOT"
 
 alcatraz {
-    packageName.set("alcatraz.spring.test")
+    packageName.set("spring.test")
 
     integrity {
         enabled.set(true)

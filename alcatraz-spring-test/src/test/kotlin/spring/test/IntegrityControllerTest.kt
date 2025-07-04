@@ -1,4 +1,4 @@
-package alcatraz.spring.test
+package spring.test
 
 import alcatraz.integrity.model.RegisterDevice
 import org.junit.jupiter.api.Test

@@ -6,7 +6,6 @@ include(
     "alcatraz-core",
     "alcatraz-spring-test",
     "alcatraz-test",
-    "alcatraz-server",
     "alcatraz-devicecheck",
     "alcatraz-devicecheck-codegen",
     "alcatraz-integrity-codegen",

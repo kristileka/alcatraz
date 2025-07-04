@@ -1,4 +1,4 @@
-package alcatraz.spring.test
+package spring.test
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
